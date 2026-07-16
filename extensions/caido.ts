@@ -314,7 +314,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 				let text = trunc.content;
 				if (trunc.truncated) text += `\n\n[Output truncated. Full request/response in Caido, request_id=${res.id}]`;
 				return {
-					content: [{ type: "text", text }],
+					content: [{ type: "text" as const, text }],
 					details: {
 						request_id: res.id,
 						replay_session_id: res.replay_session_id,
@@ -383,7 +383,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 								.join("\n");
 				const text = `${res.count ?? nodes.length} match(es):\n${lines}\n\nUse caido_get_request <id> for the full raw pair.`;
 				return {
-					content: [{ type: "text", text }],
+					content: [{ type: "text" as const, text }],
 					details: { count: res.count ?? nodes.length, nodes },
 				};
 			} catch (e) {
@@ -411,7 +411,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 				const trunc = truncateHead(text, { maxBytes: DEFAULT_MAX_BYTES, maxLines: 2000 });
 				let out = trunc.content;
 				if (trunc.truncated) out += `\n\n[Output truncated. Full data in Caido, request_id=${params.id}]`;
-				return { content: [{ type: "text", text: out }], details: { id: params.id } };
+				return { content: [{ type: "text" as const, text: out }], details: { id: params.id } };
 			} catch (e) {
 				return toolError(ctx, e);
 			}
@@ -445,7 +445,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 								)
 								.join("\n");
 				return {
-					content: [{ type: "text", text: `${res.count ?? nodes.length} total:\n${lines}` }],
+					content: [{ type: "text" as const, text: `${res.count ?? nodes.length} total:\n${lines}` }],
 					details: { count: res.count, nodes },
 				};
 			} catch (e) {
@@ -477,7 +477,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 					`  curl --cacert ${p.ca_cert} -x ${p.proxy} http://target/ ...\n` +
 					`  ffuf -x ${p.proxy} ...   (HTTP); for HTTPS point -x at the proxy too.\n\n` +
 					`All captured traffic is queryable via caido_search.`;
-				return { content: [{ type: "text", text }], details: p };
+				return { content: [{ type: "text" as const, text }], details: p };
 			} catch (e) {
 				return toolError(ctx, e);
 			}
@@ -506,14 +506,15 @@ export default function caidoExtension(pi: ExtensionAPI) {
 				if (params.action === "list") {
 					// list_scopes isn't a CLI subcommand; use status-derived approach via gql? Use python one-liner.
 					return {
-						content: [{ type: "text", text: "Use /caido to manage scopes, or the GUI. (list via Caido GUI for now)" }],
+						content: [{ type: "text" as const, text: "Use /caido to manage scopes, or the GUI. (list via Caido GUI for now)" }],
+						details: {},
 					};
 				}
 				const args = ["scope-add", params.name || "ctf"];
 				for (const a of params.allow ?? []) args.push("--allow", a);
 				for (const d of params.deny ?? []) args.push("--deny", d);
 				const res = runJson<any>(args);
-				return { content: [{ type: "text", text: `Scope added: ${JSON.stringify(res)}` }], details: res };
+				return { content: [{ type: "text" as const, text: `Scope added: ${JSON.stringify(res)}` }], details: res };
 			} catch (e) {
 				return toolError(ctx, e);
 			}
@@ -529,7 +530,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 			lastError ||
 			"Caido is running but has no active project. Open the Caido GUI once (free cloud login) to create a project, or set CAIDO_API_TOKEN to an API token from Caido Settings, then retry.";
 		return {
-			content: [{ type: "text", text: `⚠ Caido not ready: ${msg}` }],
+			content: [{ type: "text" as const, text: `⚠ Caido not ready: ${msg}` }],
 			details: { error: msg, not_ready: true },
 			isError: true,
 		};
@@ -540,7 +541,7 @@ export default function caidoExtension(pi: ExtensionAPI) {
 		const msg = e instanceof Error ? e.message : String(e);
 		lastError = msg;
 		return {
-			content: [{ type: "text", text: `Caido error: ${msg}` }],
+			content: [{ type: "text" as const, text: `Caido error: ${msg}` }],
 			details: { error: msg },
 			isError: true,
 		};

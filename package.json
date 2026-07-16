@@ -1,6 +1,6 @@
 {
 	"name": "pi-caido",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Drive Caido from pi — send requests through the Repeater, search HTTP history with HTTPQL, route scanners through the proxy, and keep every byte of CTF / pentest traffic in one place.",
 	"type": "module",
 	"keywords": [
@@ -45,7 +45,8 @@
 		"py-check": "python3 -m py_compile scripts/caido.py && echo 'caido.py: syntax OK'"
 	},
 	"devDependencies": {
-		"typescript": "^5.6.0"
+		"@types/node": "^22.20.1",
+		"typescript": "^5.9.3"
 	},
 	"peerDependencies": {
 		"@earendil-works/pi-ai": "*",
@@ -54,10 +55,18 @@
 		"typebox": "*"
 	},
 	"peerDependenciesMeta": {
-		"@earendil-works/pi-ai": { "optional": false },
-		"@earendil-works/pi-coding-agent": { "optional": false },
-		"@earendil-works/pi-tui": { "optional": false },
-		"typebox": { "optional": false }
+		"@earendil-works/pi-ai": {
+			"optional": false
+		},
+		"@earendil-works/pi-coding-agent": {
+			"optional": false
+		},
+		"@earendil-works/pi-tui": {
+			"optional": false
+		},
+		"typebox": {
+			"optional": false
+		}
 	},
 	"engines": {
 		"node": ">=18"

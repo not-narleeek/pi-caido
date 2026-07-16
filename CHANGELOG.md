@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-07-16
+
+### Fixed
+- Made `npm run check` (TypeScript type-check) actually pass. It had never
+  been runnable because `@types/node` was missing, and it surfaced 6 latent
+  type errors: every tool's `execute` returned `content: [{ type: "text" }]`
+  where TypeScript widened `"text"` to `string`, breaking the
+  `AgentToolResult` contract. Added `as const` to all 9 content literals, and
+  added the missing `details` field to the `caido_scope` list-action return.
+  Harmless at runtime, but the type-check is now functional and enforceable
+  in CI.
+
+### Changed
+- Added `@types/node` and `typescript` as dev dependencies (were missing —
+  the `check` script needs them).
+
 ## [0.1.0] - 2025-07-16
 
 ### Added
